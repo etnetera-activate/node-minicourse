@@ -1,0 +1,19 @@
+{
+  "name": "slackFileKiller",
+  "version": "1.0.0",
+  "description": "helper for cleaning slack",
+  "main": "index.js",
+  "scripts": {
+    "test": "test.js"
+  },
+  "keywords": [
+    "node",
+    "skoleni"
+  ],
+  "author": "jiri.stepan@etnetera.cz",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "debug": "^3.1.0"
+  }
+}
