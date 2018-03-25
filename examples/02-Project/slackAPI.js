@@ -1,31 +1,38 @@
+'use strict'
 
 const cfg = require("./config.js");
 
-const debug = require("debug")("slackAPI");
+const debug = require("debug")("slack:api");
 const axios = require("axios");
 var moment = require("moment");
 
+const filesPerPageCount = 100
+
+module.exports = {
+  getAllSlackFiles: getAllSlackFiles,
+  getLargeOldFiles: getLargeOldFiles
+}
+
 var client = axios.create({
   baseURL: 'https://slack.com/api/',
-  timeout: 5000,
+  timeout: 10000,
   headers: {'Authorization': 'Bearer '+cfg.slack.token}
 });
 
-function getAllFiles(){
+function getAllSlackFiles(){
   return new Promise((resolve,reject)=>{
-    debug("starting download")
-    client.get('files.list?count=100').then(response => {
+    debug("Getting all files from SLACK API..")
+    client.get(`files.list?count=${filesPerPageCount}`).then(response => {
         return response.data.paging
       }).then((paging)=>{
-        debug("There is %d pages",paging.pages)
+        debug("There is %d pages of files",paging.pages)
         var requests = []
         for(var i = 1 ; i <= paging.pages ; i++){
-          var request = client.get("files.list?count=100&page="+i)
+          var request = client.get(`files.list?count=${filesPerPageCount}&page=${i}`)
             .then((result => {
               debug("%O",result.data.paging)
               return(result.data.files)
             }))
-
           requests.push(request);
         }
         Promise.all(requests).then((results)=>{
@@ -36,42 +43,43 @@ function getAllFiles(){
   })
 }
 
+
+function getLargeOldFiles(minSize = 5, minAge = 90){
+  return new Promise((resolve,reject)=>{
+    getAllSlackFiles()
+      .then((data)=>{
+        debug("LENGTH: "+data.length)
+        var files = data.map((obj)=>{
+
+          var fileDate = moment(obj.timestamp*1000).format("YYYY-MM-DD");
+          var today = moment();
+          var duration = moment.duration(today.diff(fileDate));
+          var ageDays = duration.asDays();
+
+          return {
+            id: obj.id,
+            name: obj.name + " ("+obj.title+")",
+            date:fileDate,
+            age: ageDays,
+            size: obj.size / (1024*1024),
+            mode: obj.mode,
+            mimeType: obj.mimetype,
+          }
+        })
+        resolve(files.filter(obj => (obj.size >= minSize)&&(obj.age >=minAge)))
+      })
+    })
+}
+
 function deleteFile(fileId){
   return new Promise((resolve, reject) => {
     client.get("files.delete?file="+fileId).then((result => {
-      debug(`Delete file ${fileId} : ${result}`)
-      resolve(result);
+      debug(`Delete file ${fileId}`)
+      resolve(result.data);
     }))
   })
 }
 
-function shallBeDeleted(obj){
-  return (obj.size >= 5)&&(obj.age >=180)
-}
-
-getAllFiles()
-  .then((data)=>{
-    debug("LENGTH: "+data.length)
-    var files = data.map((obj)=>{
-      var fileDate = moment(obj.timestamp*1000).format("YYYY-MM-DD");
-      var today = moment();
-      var duration = moment.duration(today.diff(fileDate));
-      var ageDays = duration.asDays();
-
-      return {
-        id: obj.id,
-        name: obj.name + " ("+obj.title+")",
-        date:fileDate,
-        age: ageDays,
-        size: obj.size / (1024*1024),
-        mode: obj.mode,
-        mimeType: obj.mimetype
-      }
-    })
-    debug(files.filter(shallBeDeleted))
-  })
-  .catch((e)=>{
-    debug(e)
-  })
-
+//TEST
+//getLargeOldFiles(5,90).then(res => {debug(res)})
 //deleteFile("F9VQNUKK8").then((res => debug(res)))

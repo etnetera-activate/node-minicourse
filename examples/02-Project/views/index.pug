@@ -1,0 +1,8 @@
+html
+  title= "Big soubory ze slacku"
+body
+  h1= header
+
+  ul
+    each val in files
+      li= val.id +' : '+ val.name + '('+ val.size +' , ' +val.date+')'
