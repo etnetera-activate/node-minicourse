@@ -13,7 +13,7 @@ function myFunction(filename) {
 //print it's content
 console.log("--------- Start ---------")
 
-myFunction("__filename")
+myFunction(__filename)
   .then((data) => {
     console.log(data)
   })
