@@ -1,6 +1,5 @@
 //odpoved na otazku, zda muze kun dojit z B1 na E6 na prave 5 kroku
 
-
 var debug = require("debug")("chess")
 var moveCounter = 0;
 
@@ -16,8 +15,8 @@ var horseMoves = [
   [-2, 1],
   [-1,-2],
   [-2,-1],
-  [1, -2],
-  [2, -1]
+  [ 1,-2],
+  [ 2,-1]
 ]
 
 function generateHorseMoves(position){
