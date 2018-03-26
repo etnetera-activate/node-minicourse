@@ -60,3 +60,4 @@ typings/
 # dotenv environment variables file
 .env
 .vscode/launch.json
+~$node-uvod.pptx
