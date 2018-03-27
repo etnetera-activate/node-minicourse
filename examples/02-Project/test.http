@@ -1,0 +1,3 @@
+GET https://slack.com/api/files.list?count=2
+Authorization: Bearer xoxp-5062663455-5062663457-336147124002-2130313973e5528236a0a5ca0f95d313
+

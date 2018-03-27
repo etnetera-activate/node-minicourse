@@ -35,7 +35,7 @@ function getAllSlackFiles() {
             var files = results.map(obj => { return obj.data.files })
             files = [].concat.apply([], files); //flatten array of arrays
             resolve(files)
-        })
+        }).catch(e => { reject(e) })
     })
 }
 
@@ -66,12 +66,13 @@ function getLargeOldFiles(minSize = 5, minAge = 90) {
         })
 }
 
+//eslint-disable-next-line no-unused-vars
 function deleteFile(fileId) {
     return new Promise((resolve, reject) => {
         client.get("files.delete?file=" + fileId).then((result => {
             debug(`Delete file ${fileId}`)
             resolve(result.data);
-        }))
+        })).catch(e => { reject(e) })
     })
 }
 
