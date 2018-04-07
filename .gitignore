@@ -61,3 +61,6 @@ typings/
 .env
 .vscode/launch.json
 ~$node-uvod.pptx
+examples/02-Project/.vscode/launch.json
+examples/02-Project/.eslintrc.js
+examples/02-Project/.eslintrc.js

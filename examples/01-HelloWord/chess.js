@@ -1,13 +1,26 @@
+// @ts-check
+'use strict'
+
+
 // Odpoved na otazku, zda muze kun dojit z B1 na E6 na prave 5 kroku
 // 
 
 var debug = require("debug")("chess")
 var moveCounter = 0;
 
+let i = 0
+i = "jirka"
+
+
 var config = {
     start: [2, 1], //B1
-    end: [5, 6], //E6
-    maxMoves: 5
+    end: [8, 1], //E6
+    maxMoves: 4
+}
+
+for (let i = 0; i < texts.length; i++) {
+    const element = texts[i];
+
 }
 
 var horseMoves = [
@@ -20,6 +33,7 @@ var horseMoves = [
     [1, -2],
     [2, -1]
 ]
+
 
 function generateHorseMoves(position) {
     //debug("Generationg available moves for %O", position)
@@ -34,7 +48,7 @@ function generateHorseMoves(position) {
     return out;
 }
 
-//add new move at the end of move array. Check if this is a target
+//add new move at the end of move texts. Check if this is a target
 function moveHorse(moves) {
     if ((moves[moves.length - 1][0] == config.end[0]) && (moves[moves.length - 1][1] == config.end[1])) {
         debug("Success on %d %o", moves.length - 1, moves)

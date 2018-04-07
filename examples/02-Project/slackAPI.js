@@ -2,7 +2,7 @@
 
 const cfg = require("./config.js");
 
-const debug = require("debug")("slack:api");
+const debug = require("debug")("activate:slackapi");
 const axios = require("axios");
 var moment = require("moment");
 
@@ -45,7 +45,7 @@ function getOldLargeFiles(minSize = 10, minAge = 90) {
             })
             .then((results) => {
                 var files = results.map(obj => { return obj.data.files })
-                files = [].concat.apply([], files); //flatten array of arrays
+                files = files.reduce((acc, val) => acc.concat(val), [])
                 return (files)
             })
             .then((files) => {
@@ -69,13 +69,14 @@ function getOldLargeFiles(minSize = 10, minAge = 90) {
             })
             .then((mappedFiles) => {
                 var out = mappedFiles.filter(obj => (obj.size >= minSize) && (obj.age >= minAge));
+                out = out.sort((obj1, obj2) => { return obj2.size - obj1.size })
+
+
+                var totalSize = out.map(obj => { return obj.size }).reduce((total, num) => { return total + num })
+                debug("Found %d files with total size %d MB", out.length, Math.ceil(totalSize));
                 return (out);
             })
             .then(out => { resolve(out) })
             .catch(e => { reject(e) })
     })
 }
-
-debug("Start")
-getOldLargeFiles(5, 90).then(out => debug(out))
-debug("end")

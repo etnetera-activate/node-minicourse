@@ -5,4 +5,7 @@ body
 
   ul
     each val in files
-      li= val.id +' : '+ val.name + '('+ val.size +' , ' +val.date+')'
+      li= val.id +' : '+ val.name + '('+ val.size +' , ' +val.date+')' 
+      a(href='deleteFile?id='+val.id) 
+
+
