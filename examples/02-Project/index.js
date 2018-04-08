@@ -1,6 +1,6 @@
 'use strict'
 
-var cfg = require("./config")
+var cfg = require("./config.js")
 var logger = cfg.logger
 const slack = require("./slackAPI.js")
 var debug = require("debug")("slack:index")
