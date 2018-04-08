@@ -31,7 +31,7 @@ app.get('/slack/files/filter/:size/:age/html', function(req, res) {
     var size = req.params['size']
     var age = req.params['age']
     slack.getLargeOldFiles(size, age).then(files => {
-        res.render('index', {
+        res.render(__dirname + '/index', {
             header: `Files >${size}MB and older than ${age} days`,
             files: files
         })
