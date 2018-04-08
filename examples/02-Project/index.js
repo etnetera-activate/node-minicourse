@@ -39,7 +39,8 @@ app.get('/slack/files/filter/:size/:age/html', function(req, res) {
 })
 
 
-var port = 35000
+var port = process.env.ENV_VARIABLE ? process.env.ENV_VARIABLE : 30009;
+
 app.listen(port, () => {
     logger.info('Example app listening on port: ' + port);
 })

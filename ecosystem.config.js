@@ -13,7 +13,8 @@ module.exports = {
                 DEBUG: 'activate*'
             },
             env_production: {
-                NODE_ENV: 'production'
+                NODE_ENV: 'production',
+                PORT: 30009
             }
         }
     ],
