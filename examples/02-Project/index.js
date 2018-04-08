@@ -4,6 +4,7 @@ var cfg = require("./config.js")
 var logger = cfg.logger
 const slack = require("./slackAPI.js")
 var debug = require("debug")("slack:index")
+var path = require('path');
 
 const express = require('express')
 const app = express()
@@ -15,6 +16,7 @@ var loggerMiddelware = function(req, res, next) {
 }
 app.use(loggerMiddelware);
 app.set('view engine', 'pug')
+app.set('views', path.join(__dirname, '/views'));
 
 app.get('/slack/files/all', (req, res) => {
     slack.getAllSlackFiles().then(files => { res.json(files) })
@@ -31,7 +33,7 @@ app.get('/slack/files/filter/:size/:age/html', function(req, res) {
     var size = req.params['size']
     var age = req.params['age']
     slack.getLargeOldFiles(size, age).then(files => {
-        res.render(__dirname + '/index', {
+        res.render('index', {
             header: `Files >${size}MB and older than ${age} days`,
             files: files
         })
