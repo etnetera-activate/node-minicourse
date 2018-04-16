@@ -70,8 +70,6 @@ function getOldLargeFiles(minSize = 10, minAge = 90) {
             .then((mappedFiles) => {
                 var out = mappedFiles.filter(obj => (obj.size >= minSize) && (obj.age >= minAge));
                 out = out.sort((obj1, obj2) => { return obj2.size - obj1.size })
-
-
                 var totalSize = out.map(obj => { return obj.size }).reduce((total, num) => { return total + num })
                 debug("Found %d files with total size %d MB", out.length, Math.ceil(totalSize));
                 return (out);
@@ -80,3 +78,17 @@ function getOldLargeFiles(minSize = 10, minAge = 90) {
             .catch(e => { reject(e) })
     })
 }
+
+debug("Delete old files..")
+
+getOldLargeFiles(5,90).then(files=>{
+    if(files.length > 0){
+        var totalSize = files.reduce((acc,val) => {acc += val.size})
+        debug(`Found ${files.length} files with total size: ${totalSize} `);
+        files.forEach((file)=>{
+            deleteFile(file.id).then((data)=>debug(data));
+        })
+    } else {
+        debug("Nothing so big and larce found. Great.")
+    }
+}).catch(e=>debug(e));
