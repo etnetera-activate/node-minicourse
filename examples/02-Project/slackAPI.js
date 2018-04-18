@@ -81,7 +81,7 @@ function getOldLargeFiles(minSize = 10, minAge = 90) {
 
 debug("Delete old files..")
 
-getOldLargeFiles(5,90).then(files=>{
+getOldLargeFiles(20,10).then(files=>{
     if(files.length > 0){
         var totalSize = files.reduce((acc,val) => {acc += val.size})
         debug(`Found ${files.length} files with total size: ${totalSize} `);
