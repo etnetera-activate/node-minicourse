@@ -81,14 +81,18 @@ function getOldLargeFiles(minSize = 10, minAge = 90) {
 
 debug("Delete old files..")
 
-getOldLargeFiles(20,10).then(files=>{
-    if(files.length > 0){
-        var totalSize = files.reduce((acc,val) => {acc += val.size})
-        debug(`Found ${files.length} files with total size: ${totalSize} `);
-        files.forEach((file)=>{
-            deleteFile(file.id).then((data)=>debug(data));
-        })
-    } else {
-        debug("Nothing so big and larce found. Great.")
-    }
-}).catch(e=>debug(e));
+getOldLargeFiles(0,60).then(files=>{
+    debug("Done")
+})
+
+// getOldLargeFiles(0,45).then(files=>{
+//     if(files.length > 0){
+//         var totalSize = files.reduce((acc,val) => {acc += val.size})
+//         debug(`Found ${files.length} files with total size: ${totalSize} `);
+//         files.forEach((file)=>{
+//             deleteFile(file.id).then((data)=>debug(data));
+//         })
+//     } else {
+//         debug("Nothing so big and larce found. Great.")
+//     }
+// }).catch(e=>debug(e));
